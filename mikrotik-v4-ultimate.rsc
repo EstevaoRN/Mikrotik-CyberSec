@@ -1,6 +1,6 @@
 # =======================================================================
-# 🏆 MIKROTIK EXPERT - V4.0 (ARM EDITION - RB-E60iUGS)
-# Arquitetura Zero Trust | Dual-VPN | SFP Ready
+# 🏆 MIKROTIK EXPERT - V4.1 (ARM EDITION - RB-E60iUGS)
+# Arquitetura Zero Trust L3 e L2 | Dual-VPN | SFP Ready
 # =======================================================================
 
 # -----------------------------------------------------------------------
@@ -111,12 +111,31 @@ add chain=forward connection-state=new action=drop comment="20. DROP-ALL-NEW-FWD
 add interface=wg0 public-key="COLOQUE_A_CHAVE_DO_CELULAR_AQUI" allowed-address=10.99.99.2/32 comment="Smartphone ADM (Backup)"
 
 # -----------------------------------------------------------------------
-# 🛡️ MÓDULO 8 — HARDENING FINAL
+# 🛡️ MÓDULO 8 — HARDENING FINAL (CAMADA 3 E CAMADA 2)
 # -----------------------------------------------------------------------
 /ip service
 disable telnet,ftp,www,api,api-ssl
 set winbox address=""
 set ssh address=""
+
+# --- Bloqueio de Camada 2 (Proteção MAC Address) ---
+/interface list
+add name=MAC-ACCESS comment="Lista de portas com acesso MAC"
+
+/interface list member
+add interface=LAN-ADM list=MAC-ACCESS
+
+/tool mac-server
+set allowed-interface-list=MAC-ACCESS
+
+/tool mac-server mac-winbox
+set allowed-interface-list=MAC-ACCESS
+
+/tool mac-server ping
+set enabled=no
+
+/ip neighbor discovery-settings
+set discover-interface-list=MAC-ACCESS
 
 /system identity set name="RB-E60iUGS-Core"
 
@@ -146,5 +165,5 @@ set ssh address=""
 # Se estiver "yes", a interface ZT1 do script acima sairá do status 
 # "inactivated" e conectará automaticamente à nuvem.
 # =======================================================================
-# FIM DO MANUAL DE OURO V4.0
+# FIM DO MANUAL DE OURO V4.1
 # =======================================================================
