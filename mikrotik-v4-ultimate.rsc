@@ -100,7 +100,7 @@ add chain=forward src-address=10.99.99.0/24 out-interface=WAN action=accept comm
 
 # Liberação das VPNs para acessar apenas a rede de ADM remota
 add chain=forward in-interface=zerotier1 dst-address=10.10.10.0/24 action=accept comment="18. ZT-TO-ADM-ONLY"
-add chain=forward src-interface=wg0 dst-address=10.10.10.0/24 action=accept comment="19. WG-TO-ADM-ONLY"
+add chain=forward in-interface=wg0 dst-address=10.10.10.0/24 action=accept comment="19. WG-TO-ADM-ONLY"
 
 add chain=forward connection-state=new action=drop comment="20. DROP-ALL-NEW-FWD (Implicit Deny)"
 
